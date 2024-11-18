@@ -16,7 +16,7 @@ const Store = () => {
     // Fetch products from the backend
     const fetchProducts = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/products'); // Update with your backend URL
+            const response = await fetch('https://oceankartv1.onrender.com/api/products'); // Update with your backend URL
             if (!response.ok) {
                 throw new Error(`Error fetching products: ${response.statusText}`);
             }
