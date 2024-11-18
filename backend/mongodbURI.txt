@@ -1,0 +1,1 @@
+mongoimport --uri "mongodb+srv://hareeshankar:nf6oxz68gx5yVLZi@oceancluster0.wnnyw.mongodb.net/" --collection products --file seafood.json --jsonArray

@@ -1,0 +1,154 @@
+/* ProductCard.css */
+.product-card {
+    width: 150px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background-color: #ffffff;
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+.product-image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-image {
+    width: 80px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.add-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #ffffff;
+    border: 1px solid #007bff;
+    color: #007bff;
+    font-size: 1rem;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.product-details {
+    margin-top: 0.5rem;
+}
+
+.product-name {
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.product-size {
+    font-size: 0.8rem;
+    color: #777;
+    margin: 0;
+}
+
+.product-price {
+    font-size: 0.9rem;
+    color: #333;
+    margin: 0.3rem 0;
+    font-weight: bold;
+}
+/* Modal Overlay */
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.custom-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.custom-modal p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.close-modal-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.close-modal-button:hover {
+    background-color: #0056b3;
+}
+
+/* Specific adjustments for very small screens (max-width: 320px) */
+@media (max-width: 320px) {
+    body {
+        font-size: 12px;
+    }
+
+    .container {
+        padding: 5px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        padding: 5px;
+    }
+
+    .product-card {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .product-details {
+        font-size: 12px;
+    }
+
+    .add-button {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    .cart-summary-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    h1, h2, h3 {
+        font-size: 16px;
+    }
+}

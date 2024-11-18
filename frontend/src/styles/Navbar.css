@@ -1,0 +1,173 @@
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.5rem;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-logo {
+    height: 40px;
+    width: auto;
+    cursor: pointer;
+}
+
+.navbar-title {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.search-bar-container {
+    flex: 1;
+    display: flex;
+    justify-content: left;
+    margin: 0 1rem;
+}
+
+.search-bar {
+    width: 100%;
+max-width: fit-content;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+}
+
+/* Auth Container */
+.auth-container {
+    display: flex; /* Ensure items are aligned horizontally */
+    align-items: center; /* Vertically align items (buttons or profile icon) */
+    gap: 1rem; /* Add spacing between buttons/icons */
+    height: auto; /* Prevent container from stretching vertically */
+    background-color: transparent; /* Remove any background color */
+    padding: 0; /* Ensure no unnecessary padding */
+    margin: 0; /* Remove extra margin */
+}
+
+
+.nav-button {
+    padding: 0.5rem 1rem;
+    background-color: white;
+    color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* Profile Icon */
+.profile-container {
+    position: relative;
+}
+
+.profile-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.profile-icon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: white;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    text-align: left;
+    z-index: 1500;
+}
+
+.profile-dropdown p {
+    margin: 0;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.profile-dropdown p:hover {
+    background-color: #f2f4f7;
+}
+.cart-icon-container {
+    position: relative;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive adjustments for different screen sizes */
+@media (max-width: 600px) {
+    /* Adjustments for small screens like phones */
+    body {
+        font-size: 14px;
+    }
+    .container {
+        padding: 10px;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    /* Adjustments for medium screens like tablets */
+    .container {
+        max-width: 80%;
+    }
+}
+
+@media (min-width: 901px) {
+    /* Adjustments for larger screens */
+    .container {
+        max-width: 1200px;
+    }
+}

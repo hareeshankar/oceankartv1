@@ -1,0 +1,72 @@
+/* Container for the search bar */
+.search-bar-container {
+    position: relative;
+    width: 100%; /* Full width */
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+/* The search bar input */
+.search-bar {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem; /* Add space for the clear button */
+    margin-right: 2vh;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+/* Change border color on focus */
+.search-bar:focus {
+    border-color: #007bff; /* Highlight with blue border */
+}
+
+/* Clear button (X) */
+.clear-button {
+    position: relative;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+/* Clear button hover effect */
+.clear-button:hover {
+    color: #000;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .search-bar {
+        font-size: 0.9rem;
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
+    }
+
+    .clear-button {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-bar {
+        font-size: 0.85rem;
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .search-bar {
+        font-size: 0.8rem;
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
+    }
+
+    .clear-button {
+        font-size: 0.9rem;
+    }
+}

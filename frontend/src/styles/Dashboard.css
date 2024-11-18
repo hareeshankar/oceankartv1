@@ -1,0 +1,81 @@
+/* Dashboard.css */
+.dashboard-container {
+    padding: 2rem;
+    text-align: center;
+}
+
+.dashboard-container h1 {
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.dashboard-content {
+    display: flex;
+    justify-content: space-around;
+}
+
+.section {
+    background-color: #f2f4f7;
+    padding: 1.5rem;
+    border-radius: 8px;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section h2 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.section button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.section button:hover {
+    background-color: #0056b3;
+}
+
+/* Specific adjustments for very small screens (max-width: 320px) */
+@media (max-width: 320px) {
+    body {
+        font-size: 12px;
+    }
+
+    .container {
+        padding: 5px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        padding: 5px;
+    }
+
+    .product-card {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .product-details {
+        font-size: 12px;
+    }
+
+    .add-button {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    .cart-summary-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    h1, h2, h3 {
+        font-size: 16px;
+    }
+}

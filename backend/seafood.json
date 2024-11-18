@@ -1,0 +1,295 @@
+[{
+    "name": "King Fish",
+    "size": "500g",
+    "price": 250,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Salmon",
+    "size": "500g",
+    "price": 500,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Tuna",
+    "size": "1kg",
+    "price": 600,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Prawns Large",
+    "size": "500g",
+    "price": 350,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Crab",
+    "size": "1kg",
+    "price": 400,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Mackerel",
+    "size": "500g",
+    "price": 150,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Red Snapper",
+    "size": "500g",
+    "price": 280,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Lobster",
+    "size": "500g",
+    "price": 750,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Pomfret Black",
+    "size": "500g",
+    "price": 300,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Pomfret White",
+    "size": "500g",
+    "price": 320,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Anchovies",
+    "size": "250g",
+    "price": 100,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Barracuda",
+    "size": "500g",
+    "price": 240,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Swordfish",
+    "size": "500g",
+    "price": 550,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Shrimp",
+    "size": "500g",
+    "price": 300,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Tilapia",
+    "size": "1kg",
+    "price": 200,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Mud Crab",
+    "size": "1kg",
+    "price": 450,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Silver Pomfret",
+    "size": "500g",
+    "price": 290,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Blue Crab",
+    "size": "500g",
+    "price": 300,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Indian Salmon (Rawas)",
+    "size": "500g",
+    "price": 400,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Squid",
+    "size": "250g",
+    "price": 150,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Catla",
+    "size": "1kg",
+    "price": 180,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Rohu",
+    "size": "1kg",
+    "price": 190,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Carp",
+    "size": "1kg",
+    "price": 160,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Basa Fillet",
+    "size": "500g",
+    "price": 220,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Tilapia Fillet",
+    "size": "500g",
+    "price": 210,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Cuttlefish",
+    "size": "500g",
+    "price": 280,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Whiteleg Shrimp",
+    "size": "500g",
+    "price": 320,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Rock Lobster",
+    "size": "500g",
+    "price": 800,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Threadfin Bream",
+    "size": "500g",
+    "price": 200,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Sea Bass",
+    "size": "1kg",
+    "price": 500,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Grey Mullet",
+    "size": "500g",
+    "price": 180,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Crayfish",
+    "size": "500g",
+    "price": 600,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Blue Mussels",
+    "size": "500g",
+    "price": 200,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Green Mussels",
+    "size": "500g",
+    "price": 220,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Black Tiger Prawns",
+    "size": "500g",
+    "price": 450,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Flower Shrimp",
+    "size": "500g",
+    "price": 340,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Red Snapper Fillet",
+    "size": "500g",
+    "price": 360,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Yellowtail Snapper",
+    "size": "1kg",
+    "price": 580,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Halibut",
+    "size": "500g",
+    "price": 500,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Octopus",
+    "size": "500g",
+    "price": 400,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Barramundi (Asian Sea Bass)",
+    "size": "500g",
+    "price": 420,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Tilapia Whole",
+    "size": "1kg",
+    "price": 220,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Pangasius",
+    "size": "1kg",
+    "price": 240,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Bream",
+    "size": "500g",
+    "price": 250,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Spiny Lobster",
+    "size": "500g",
+    "price": 900,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Haddock",
+    "size": "500g",
+    "price": 310,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Monkfish",
+    "size": "500g",
+    "price": 480,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Butter Fish",
+    "size": "500g",
+    "price": 260,
+    "image": "https://via.placeholder.com/80"
+},
+{
+    "name": "Baby Octopus",
+    "size": "250g",
+    "price": 190,
+    "image": "https://via.placeholder.com/80"
+}]
+  
