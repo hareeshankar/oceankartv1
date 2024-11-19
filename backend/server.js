@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
+const authMiddleware = require('../middleware/authMiddleware');
+
 dotenv.config();
 
 const app = express();
@@ -19,10 +21,19 @@ app.get('/', (req, res) => {
 
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
+// Apply Authentication Middleware Globally
+app.use(authMiddleware);
 
-const productsRoutes = require('./routes/products'); 
-// Use the products route
-app.use('/api/products', productsRoutes);
+
+app.use('/api/orders', require('./routes/orderRoutes'));
+app.use('/api/products', require('./routes/productRoutes'));
+
+// Error Handling Middleware (Optional)
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something went wrong!' });
+});
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

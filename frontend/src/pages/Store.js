@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
-import CartModal from '../components/CartModal';
 import SearchBar from '../components/SearchBar';
 import '../styles/Store.css';
 
@@ -9,7 +9,7 @@ const Store = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [showCartModal, setShowCartModal] = useState(false);
+    const navigate = useNavigate();
 
     const isLoggedIn = !!localStorage.getItem('token');
 
@@ -35,6 +35,7 @@ const Store = () => {
     const filteredProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
     const handleAddToCart = (product) => {
         const existingItem = cart.find((item) => item._id === product._id);
         if (existingItem) {
@@ -50,27 +51,16 @@ const Store = () => {
         }
     };
 
-    const handleRemoveFromCart = (productId) => {
-        setCart(cart.filter((item) => item._id !== productId));
-    };
-
-    const handleUpdateQuantity = (productId, quantity) => {
-        if (quantity === 0) {
-            handleRemoveFromCart(productId);
-        } else {
-            setCart(
-                cart.map((item) =>
-                    item._id === productId ? { ...item, quantity } : item
-                )
-            );
-        }
+    const handleViewCart = () => {
+        navigate('/cart', { state: { cart } }); // Navigate to CartPage and pass the cart state
     };
 
     if (!isLoggedIn) {
         // Landing Page UI
         return (
             <div className="hotel-dashboard">
-                <Navbar showAuthButtons={false} onSearch={setSearchQuery} />
+                <Navbar showAuthButtons={false} />
+                <SearchBar onSearch={setSearchQuery} />
                 <div className="dashboard-content">
                     <div className="main-content">
                         <div className="product-grid">
@@ -87,38 +77,28 @@ const Store = () => {
     // Logged-in Dashboard UI
     return (
         <div className="store">
-  {/* Navbar with Cart Integration */}
-  <Navbar
-          showAuthButtons={false}
-          cartItems={cart}
-          onSearch={setSearchQuery}
-          onToggleCartModal={() => setShowCartModal(true)}
-        />
-        <SearchBar onSearch={setSearchQuery} />
-        {/* Product Grid */}
-        <div className="product-grid">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              isGuestView={!localStorage.getItem("token")} // Check if user is logged in
-              onAddToCart={handleAddToCart} // Pass add-to-cart handler
+            {/* Navbar with Cart Integration */}
+            <Navbar
+                showAuthButtons={false}
+                cartItems={cart}
+                onSearch={setSearchQuery}
+                onToggleCartModal={handleViewCart} // Use View Cart navigation
             />
-          ))}
-        </div>
+            <SearchBar onSearch={setSearchQuery} />
+            {/* Product Grid */}
+            <div className="product-grid">
+                {filteredProducts.map((product) => (
+                    <ProductCard
+                        key={product._id}
+                        product={product}
+                        isGuestView={!localStorage.getItem('token')} // Check if user is logged in
+                        onAddToCart={handleAddToCart} // Pass add-to-cart handler
+                    />
+                ))}
+            </div>
 
-        {/* Cart Modal */}
-        {showCartModal && (
-          <CartModal
-            cart={cart}
-            onClose={() => setShowCartModal(false)}
-            onRemoveFromCart={handleRemoveFromCart}
-            onUpdateQuantity={handleUpdateQuantity}
-          />
-        )}
-
-          {/* View Cart Button */}
-          <div className="view-cart-footer">
+            {/* View Cart Button */}
+            <div className="view-cart-footer">
                 <p>
                     {cart.length} items | Total: ₹
                     {cart.reduce(
@@ -128,7 +108,7 @@ const Store = () => {
                 </p>
                 <button
                     className="view-cart-button"
-                    onClick={() => setShowCartModal(true)}
+                    onClick={handleViewCart} // Navigate to CartPage instead of showing a modal
                 >
                     View Cart
                 </button>

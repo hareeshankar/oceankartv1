@@ -33,7 +33,7 @@ const Login = () => {
             // Navigate based on user role
             switch (user.role) {
                 case 'hotel':
-                    navigate('/hotel-dashboard');
+                    navigate('/store');
                     break;
                 case 'vendor':
                     navigate('/vendor-dashboard');
