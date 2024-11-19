@@ -36,7 +36,7 @@ const RazorpayButton = ({ amount, deliveryAddress, cartItems, onPaymentError, na
                 };
 
                 try {
-                    const res = await fetch('/api/orders', {
+                    const res = await fetch('https://oceankartv1.onrender.com/api/orders', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
