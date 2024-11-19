@@ -17,6 +17,7 @@ const Store = () => {
     const fetchProducts = async () => {
         try {
             const token = localStorage.getItem('token'); // Retrieve the token
+            console.log('Token:', token);
             if (!token) {
                 throw new Error('No authentication token found. Please log in.');
             }
