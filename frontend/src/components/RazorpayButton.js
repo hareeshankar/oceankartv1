@@ -28,12 +28,14 @@ const RazorpayButton = ({ amount, deliveryAddress, cartItems, onPaymentError, na
 
                 // Save the order to the backend
                 const orderDetails = {
-                    deliveryAddress,
-                    cartItems,
-                    totalAmount: amount,
-                    paymentId: response.razorpay_payment_id,
-                    paymentStatus: 'Paid',
+                    userId: localStorage.getItem('userId'), // Retrieve user ID from localStorage
+                    address: deliveryAddress, // Delivery address provided by the user
+                    items: cartItems, // Cart items
+                    totalAmount: amount, // Total price of all items
+                    paymentId: response.razorpay_payment_id, // Payment ID returned by Razorpay
+                    paymentStatus: 'Paid', // Explicitly include the payment status
                 };
+                
 
                 try {
                     const res = await fetch('https://oceankartv1.onrender.com/api/orders', {
