@@ -1,5 +1,5 @@
 // Order Controller logic here
-const Order = require('../models/Order');
+const Order = require('../models/Orders');
 
 exports.getUserOrders = async (req, res) => {
     try {
