@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
-const authMiddleware = require('../middleware/authMiddleware');
+const authMiddleware = require('./middleware/authMiddleware');
 
 dotenv.config();
 
