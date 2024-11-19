@@ -26,7 +26,7 @@ app.use(authMiddleware);
 
 
 app.use('/api/orders', require('./routes/orderRoutes'));
-app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/products', require('./routes/products'));
 
 // Error Handling Middleware (Optional)
 app.use((err, req, res, next) => {
