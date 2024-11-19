@@ -16,14 +16,27 @@ const Store = () => {
     // Fetch products from the backend
     const fetchProducts = async () => {
         try {
-            const response = await fetch('https://oceankartv1.onrender.com/api/products'); // Update with your backend URL
+            const token = localStorage.getItem('token'); // Retrieve the token
+            if (!token) {
+                throw new Error('No authentication token found. Please log in.');
+            }
+    
+            const response = await fetch('https://oceankartv1.onrender.com/api/products', {
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
+                    'Content-Type': 'application/json',
+                },
+            });
+    
             if (!response.ok) {
                 throw new Error(`Error fetching products: ${response.statusText}`);
             }
+    
             const data = await response.json();
-            setProducts(data);
+            setProducts(data); // Update the state with the fetched products
         } catch (error) {
             console.error('Error fetching products:', error);
+            alert(error.message); // Optional: Show an alert to the user
         }
     };
 
