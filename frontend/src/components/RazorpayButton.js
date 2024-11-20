@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+const API_URL = process.env.REACT_APP_API_URL;
 const RazorpayButton = ({ amount, deliveryAddress, cartItems, onPaymentError, navigateTo }) => {
     const navigate = useNavigate(); // Initialize navigate function
 
@@ -38,7 +38,7 @@ const RazorpayButton = ({ amount, deliveryAddress, cartItems, onPaymentError, na
                 
 
                 try {
-                    const res = await fetch('https://oceankartv1.onrender.com/api/orders', {
+                    const res = await fetch(`${API_URL}/api/orders`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

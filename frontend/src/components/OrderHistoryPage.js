@@ -1,6 +1,6 @@
 // Order History Page Component here
 import React, { useEffect, useState } from 'react';
-
+const API_URL = process.env.REACT_APP_API_URL;
 const OrderHistoryPage = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -10,7 +10,7 @@ const OrderHistoryPage = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await fetch('/api/orders', {
+                const response = await fetch(`${API_URL}/api/orders`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`, // Use your authentication token
                     },

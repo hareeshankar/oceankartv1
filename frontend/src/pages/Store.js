@@ -4,6 +4,19 @@ import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
 import '../styles/Store.css';
+const API_URL = process.env.REACT_APP_API_URL;
+
+async function fetchProducts() {
+  try {
+    const response = await fetch(`${API_URL}/api/products`);
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  }
+}
+
+fetchProducts();
 
 const Store = () => {
     const [products, setProducts] = useState([]);
@@ -22,7 +35,7 @@ const Store = () => {
                 throw new Error('No authentication token found. Please log in.');
             }
     
-            const response = await fetch('https://oceankartv1.onrender.com/api/products', {
+            const response = await fetch(`${API_URL}/api/products`, {
                 headers: {
                     'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
                     'Content-Type': 'application/json',
