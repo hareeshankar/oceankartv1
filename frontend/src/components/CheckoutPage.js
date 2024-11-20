@@ -42,7 +42,7 @@ const CheckoutPage = () => {
                 amount={calculateTotal()}
                 deliveryAddress={deliveryAddress}
                 cartItems={cartItems}
-                navigateTo="/order-history" // Navigate to Order History after payment
+                navigateTo="/orders" // Navigate to Order History after payment
                 onPaymentError={(error) => {
                     console.error('Payment failed:', error);
                     alert('Payment could not be completed.');
