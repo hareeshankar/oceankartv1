@@ -20,8 +20,9 @@ app.get('/', (req, res) => {
 });
 
 const authRoutes = require('./routes/auth');
+const publicProductRoutes = require('./routes/publicprRoutes');
 app.use('/api/auth', authRoutes);
-app.use('/api/products', require('./routes/products'));
+app.use('/api/prod/all', publicProductRoutes); // Unprotected route
 // Apply Authentication Middleware Globally
 app.use(authMiddleware);
 
