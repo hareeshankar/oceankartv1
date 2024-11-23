@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
 
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
+app.use('/api/products', require('./routes/products'));
 // Apply Authentication Middleware Globally
 app.use(authMiddleware);
 
