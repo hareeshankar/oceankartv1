@@ -4,37 +4,44 @@ import '../styles/SearchBar.css';
 const SearchBar = ({ onSearch }) => {
     const [searchQuery, setSearchQuery] = useState('');
 
-    const handleSearch = (e) => {
-        const value = e.target.value;
-        setSearchQuery(value);
+    const handleInputChange = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
         if (onSearch) {
-            onSearch(value);
+            onSearch(query);
         }
     };
 
-    const handleClear = () => {
+    const clearSearch = () => {
         setSearchQuery('');
         if (onSearch) {
-            onSearch(''); // Clear the search value in the parent component
+            onSearch(''); // Notify parent to reset the search results
         }
     };
 
     return (
         <div className="search-bar-container">
-            <input
-                type="text"
-                className="search-bar"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={handleSearch}
-            />
-            {searchQuery && (
-                <button className="clear-button" onClick={handleClear}>
-                    ✕
+            <div className="search-bar-wrapper">
+                <input
+                    type="text"
+                    className="search-bar"
+                    placeholder='Search for "Seafood"...'
+                    value={searchQuery}
+                    onChange={handleInputChange}
+                />
+                <button
+                    className="search-icon-button"
+                    onClick={searchQuery ? clearSearch : null}
+                >
+                    {searchQuery ? (
+                        <span role="img" aria-label="clear">❌</span> // Cross icon
+                    ) : (
+                        <span role="img" aria-label="search">🔍</span> // Search icon
+                    )}
                 </button>
-            )}
+            </div>
         </div>
     );
 };
 
-export default SearchBar
+export default SearchBar;

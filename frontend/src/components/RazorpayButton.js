@@ -1,8 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext'; 
+
 const API_URL = process.env.REACT_APP_API_URL;
 const RazorpayButton = ({ amount, deliveryAddress, cartItems, onPaymentError, navigateTo }) => {
     const navigate = useNavigate(); // Initialize navigate function
+    const { clearCart } = useCart();
 
     const handlePayment = () => {
         if (!window.Razorpay) {
@@ -49,7 +52,8 @@ const RazorpayButton = ({ amount, deliveryAddress, cartItems, onPaymentError, na
 
                     if (res.ok) {
                         console.log('Order stored successfully:', await res.json());
-                        navigate(navigateTo); // Redirect to the specified route
+                        clearCart();
+                        navigate(navigateTo, { replace: true }); // Redirect to the specified route
                     } else {
                         console.error('Failed to store order:', await res.text());
                         alert('Order could not be saved. Please contact support.');

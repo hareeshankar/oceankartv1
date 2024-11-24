@@ -1,7 +1,6 @@
 const express = require('express');
-const productsController = require('../controllers/productsController');
-
 const router = express.Router();
+const productsController = require('../controllers/productsController');
 
 // Unprotected route (no authentication required)
 router.get('/', productsController.getAllProducts);

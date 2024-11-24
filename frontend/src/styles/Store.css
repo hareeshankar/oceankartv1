@@ -55,21 +55,6 @@
 }
 /* HotelDashboard.css */
 
-/* Add these styles to style the search bar */
-.search-bar {
-    padding: 0.5rem;
-    margin-left: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 200px;
-    outline: none;
-}
-
-.search-bar:focus {
-    border-color: #007bff;
-}
-
-
 
 /* Filter Tags styling */
 .filters {
@@ -89,8 +74,10 @@
 /* Product Grid styling */
 .product-grid {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 1.5rem;
+    margin-bottom: 100px;
 }
 
 .product-card {
@@ -227,4 +214,27 @@
     h1, h2, h3 {
         font-size: 16px;
     }
+}
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 20px 10px;
+    background-color: #f0f8ff;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hero-section h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 25px;
 }

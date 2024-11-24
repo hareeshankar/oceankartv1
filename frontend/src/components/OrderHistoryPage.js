@@ -1,10 +1,14 @@
-// Order History Page Component here
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/OrderHistoryPage.css';
+
 const API_URL = process.env.REACT_APP_API_URL;
+
 const OrderHistoryPage = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     // Fetch orders from the backend
     useEffect(() => {
@@ -32,6 +36,10 @@ const OrderHistoryPage = () => {
         fetchOrders();
     }, []);
 
+    const handleContinueShopping = () => {
+        navigate('/store'); // Redirect to Store.js
+    };
+
     if (loading) {
         return <p>Loading your order history...</p>;
     }
@@ -41,39 +49,47 @@ const OrderHistoryPage = () => {
     }
 
     return (
-        <div>
+        <div className="order-history-container">
             <h1>Order History</h1>
             {orders.length === 0 ? (
                 <p>You have no orders yet.</p>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
-                    {orders.map((order) => (
-                        <div
-                            key={order._id}
-                            style={{
-                                border: '1px solid #ccc',
-                                borderRadius: '5px',
-                                padding: '20px',
-                                boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                            }}
-                        >
-                            <h3>Order ID: {order._id}</h3>
-                            <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
-                            <p><strong>Delivery Address:</strong> {order.address}</p>
-                            <p><strong>Total Amount:</strong> ₹{order.totalAmount}</p>
-                            <h4>Items:</h4>
-                            <ul>
-                                {order.items.map((item) => (
-                                    <li key={item.productId}>
-                                        {item.name} - Quantity: {item.quantity} - Price: ₹{item.price}
-                                    </li>
-                                ))}
-                            </ul>
-                            <p><strong>Payment Status:</strong> {order.paymentStatus}</p>
-                        </div>
-                    ))}
-                </div>
+                <table className="order-history-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Total Amount</th>
+                            <th>Payment Status</th>
+                            <th>Items</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {orders.map((order) => (
+                            <tr key={order._id}>
+                                <td>{order._id}</td>
+                                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                                <td>₹{order.totalAmount}</td>
+                                <td>{order.paymentStatus}</td>
+                                <td>
+                                    <ul>
+                                        {order.items.map((item) => (
+                                            <li key={item.productId}>
+                                                {item.name} - Qty: {item.quantity}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             )}
+            <div className="order-history-actions">
+                <button className="primary-button" onClick={handleContinueShopping}>
+                    Continue Shopping
+                </button>
+            </div>
         </div>
     );
 };

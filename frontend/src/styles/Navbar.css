@@ -31,22 +31,6 @@
     white-space: nowrap;
 }
 
-.search-bar-container {
-    flex: 1;
-    display: flex;
-    justify-content: left;
-    margin: 0 1rem;
-}
-
-.search-bar {
-    width: 100%;
-max-width: fit-content;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    outline: none;
-}
 
 /* Auth Container */
 .auth-container {

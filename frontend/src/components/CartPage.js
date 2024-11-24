@@ -1,108 +1,100 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext'; // Import CartContext
 import '../styles/CartPage.css';
 
 const CartPage = () => {
     const navigate = useNavigate();
-    const location = useLocation();
+    const { cart, removeFromCart, updateCartItem } = useCart();
+    const [showModal, setShowModal] = useState(false);
 
-    // Retrieve cart data from state
-    const initialCartItems = location.state?.cart || [];
-    const [cartItems, setCartItems] = useState(initialCartItems);
+    // Redirect to store if the cart is empty
+    useEffect(() => {
+        if (cart.length === 0) {
+            setShowModal(true);
+        }
+    }, [cart]);
 
-    // Function to update the quantity of a cart item
+    const closeModal = () => {
+        setShowModal(false);
+        navigate('/store'); // Redirect to Store.js
+    };
+
     const handleUpdateQuantity = (productId, quantity) => {
-        if (quantity === 0) {
-            handleRemoveFromCart(productId); // If quantity is 0, remove the item
+        if (quantity <= 0) {
+            removeFromCart(productId); // If quantity is 0, remove the item
         } else {
-            setCartItems((prevCart) =>
-                prevCart.map((item) =>
-                    item._id === productId ? { ...item, quantity } : item
-                )
-            );
+            updateCartItem(productId, quantity); // Update the cart item's quantity
         }
     };
 
-    // Function to remove an item from the cart
-    const handleRemoveFromCart = (productId) => {
-        setCartItems((prevCart) =>
-            prevCart.filter((item) => item._id !== productId)
-        );
-    };
-
     const handleCheckout = () => {
-        navigate('/checkout', { state: { cartItems } }); // Pass updated cart to CheckoutPage
-    };
-
-    const handleClose = () => {
-        navigate('/store'); // Navigate to Dashboard
+        navigate('/checkout'); // Navigate to CheckoutPage
     };
 
     const calculateTotal = () => {
-        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+        return cart.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0
+        );
     };
 
     return (
         <div className="cart-container">
-            <h1>Your Cart</h1>
-            {cartItems.length === 0 ? (
-                <p>Your cart is empty.</p>
-            ) : (
-                <>
-                    <div className="cart-items">
-                        {cartItems.map((item) => (
-                            <div className="cart-item" key={item._id}>
-                                <div className="item-details">
-                                    <span className="item-name">{item.name}</span>
-                                    <span className="item-price">
-                                        Price: ₹{item.price}
-                                    </span>
-                                </div>
-                                <div className="item-controls">
-                                    <button
-                                        onClick={() =>
-                                            handleUpdateQuantity(
-                                                item._id,
-                                                item.quantity - 1
-                                            )
-                                        }
-                                    >
-                                        -
-                                    </button>
-                                    <span className="item-quantity">
-                                        {item.quantity}
-                                    </span>
-                                    <button
-                                        onClick={() =>
-                                            handleUpdateQuantity(
-                                                item._id,
-                                                item.quantity + 1
-                                            )
-                                        }
-                                    >
-                                        +
-                                    </button>
-                                    <button
-                                        className="remove-item-button"
-                                        onClick={() => handleRemoveFromCart(item._id)}
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+             {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <p>No items in cart to checkout.</p>
+                        <button onClick={closeModal}>Go to Store</button>
                     </div>
-                    <div className="cart-summary">
-                        <h3>Total: ₹{calculateTotal()}</h3>
-                        <button className="checkout-button" onClick={handleCheckout}>
-                            Proceed to Checkout
-                        </button>
-                        <button className="close-button" onClick={handleClose}>
-                            Close
-                        </button>
-                    </div>
-                </>
+                </div>
             )}
+            <h1>Your Cart</h1>
+            <div className="cart-items-grid">
+                {cart.map((item) => (
+                    <div className="cart-item-card" key={item._id}>
+                        <div className="item-details">
+                            <h3 className="item-name">{item.name}</h3>
+                            <p className="item-price">₹{item.price}</p>
+                            <div className="item-controls">
+                                <button
+                                    onClick={() =>
+                                        handleUpdateQuantity(item._id, item.quantity - 1)
+                                    }
+                                >
+                                    -
+                                </button>
+                                <span className="item-quantity">{item.quantity}</span>
+                                <button
+                                    onClick={() =>
+                                        handleUpdateQuantity(item._id, item.quantity + 1)
+                                    }
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                        <button
+                            className="remove-item-button"
+                            onClick={() => removeFromCart(item._id)}
+                        >
+                            Remove
+                        </button>
+                    </div>
+                ))}
+            </div>
+            <div className="cart-summary">
+                <h3>Total: ₹{calculateTotal()}</h3>
+                <button className="checkout-button" onClick={handleCheckout}>
+                    Proceed to Checkout
+                </button>
+                <button
+                    className="continue-shopping-button"
+                    onClick={() => navigate('/store')}
+                >
+                    Continue Shopping
+                </button>
+            </div>
         </div>
     );
 };

@@ -1,23 +1,54 @@
-/* Styles for Order History Page */
-.order-history-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin: 20px;
+.order-history-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
-.order-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
+.order-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.order-card h3 {
-    margin-bottom: 10px;
+.order-history-table th,
+.order-history-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
 }
 
-.order-card ul {
-    padding-left: 20px;
-    list-style-type: disc;
+.order-history-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.order-history-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.order-history-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.order-history-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.primary-button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.primary-button:hover {
+    background-color: #45a049;
 }

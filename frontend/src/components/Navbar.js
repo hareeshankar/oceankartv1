@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext'; // Import the CartContext
 import '../styles/Navbar.css';
 
-const Navbar = ({ cartItems }) => {
+const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); // Check if user is logged in
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const navigate = useNavigate();
-
+    const { cart } = useCart(); // Access the cart from CartContext
 
     const handleLogout = () => {
         localStorage.removeItem('token'); // Clear token from local storage
@@ -30,8 +31,11 @@ const Navbar = ({ cartItems }) => {
             <div className="auth-container">
                 {/* Cart Icon (Visible Only When Logged In) */}
                 {isLoggedIn && (
-                    <div className="cart-icon-container" onClick={() => navigate('/cart')}>
-                        🛒 <span className="cart-count">{cartItems?.length || 0}</span>
+                    <div
+                        className="cart-icon-container"
+                        onClick={() => navigate('/cart')} // Navigate to Cart Page
+                    >
+                        🛒 <span className="cart-count">{cart.length}</span> {/* Cart item count */}
                     </div>
                 )}
 

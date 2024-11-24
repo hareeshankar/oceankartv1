@@ -53,21 +53,6 @@
 }
 /* HotelDashboard.css */
 
-/* Add these styles to style the search bar */
-.search-bar {
-    padding: 0.5rem;
-    margin-left: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 200px;
-    outline: none;
-}
-
-.search-bar:focus {
-    border-color: #007bff;
-}
-
-
 
 /* Filter Tags styling */
 .filters {
@@ -87,6 +72,7 @@
 /* Product Grid styling */
 .product-grid {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 1.5rem;
 }
