@@ -1,69 +1,127 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Badge, Menu, MenuItem, Box, Button } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext'; // Import the CartContext
-import '../styles/Navbar.css';
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); // Check if user is logged in
-    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+    const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
-    const { cart } = useCart(); // Access the cart from CartContext
+    const { cart, clearCart } = useCart(); // Added clearCart from CartContext
+
+    useEffect(() => {
+        // Check token on component mount to ensure isLoggedIn is accurate
+        setIsLoggedIn(!!localStorage.getItem('token'));
+    }, []);
+
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleLogout = () => {
-        localStorage.removeItem('token'); // Clear token from local storage
-        setIsLoggedIn(false); // Update state
+        localStorage.removeItem('token'); // Remove token from localStorage
+        clearCart(); // Clear the cart when logging out
+        setIsLoggedIn(false); // Update login state
+        setAnchorEl(null); // Close the menu
         navigate('/'); // Redirect to landing page
     };
 
-    const toggleDropdown = () => {
-        setDropdownVisible(!dropdownVisible);
-    };
-
     return (
-        <div className="navbar">
-            {/* Logo and Name */}
-            <div className="logo-container">
-                <img src="/oceankart-logo2.png" alt="OceanKart Logo" className="navbar-logo" />
-                <span className="navbar-title">OceanKart</span>
-            </div>
+        <AppBar position="static" sx={{ backgroundColor: '#004080' }}>
+            <Toolbar>
+                {/* Logo Section */}
+                <Box
+                    component="div"
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexGrow: 1,
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => navigate('/store')}
+                >
+                    <img
+                        src="/oceankart-logo2.png"
+                        alt="OceanKart Logo"
+                        style={{
+                            height: '40px',
+                            marginRight: '10px',
+                        }}
+                    />
+                    <Typography variant="h6" component="div">
+                        OceanKart
+                    </Typography>
+                </Box>
 
-            {/* Auth and Cart Icons */}
-            <div className="auth-container">
-                {/* Cart Icon (Visible Only When Logged In) */}
+                {/* Cart Icon */}
                 {isLoggedIn && (
-                    <div
-                        className="cart-icon-container"
-                        onClick={() => navigate('/cart')} // Navigate to Cart Page
-                    >
-                        🛒 <span className="cart-count">{cart.length}</span> {/* Cart item count */}
-                    </div>
+                    <IconButton color="inherit" onClick={() => navigate('/cart')}>
+                        <Badge badgeContent={cart.length} color="secondary">
+                            <ShoppingCartIcon />
+                        </Badge>
+                    </IconButton>
                 )}
 
-                {/* Profile Icon or Auth Buttons */}
+                {/* Profile Dropdown or Auth Buttons */}
                 {isLoggedIn ? (
-                    <div className="profile-container">
-                        <div className="profile-icon" onClick={toggleDropdown}>
-                            <span role="img" aria-label="user">👤</span>
-                        </div>
-                        {dropdownVisible && (
-                            <div className="profile-dropdown">
-                                <p onClick={() => navigate('/profile')}>Profile</p>
-                                <p onClick={handleLogout}>Logout</p>
-                            </div>
-                        )}
-                    </div>
+                    <>
+                        <IconButton color="inherit" onClick={handleMenuOpen}>
+                            <AccountCircleIcon />
+                        </IconButton>
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={handleMenuClose}
+                        >
+                            <MenuItem onClick={() => navigate('/profile')}>Profile</MenuItem>
+                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                        </Menu>
+                    </>
                 ) : (
                     <>
-                        <button className="nav-button" onClick={() => navigate('/register')}>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                margin: '0 10px',
+                                backgroundColor: '#007BFF', // Blue background
+                                color: '#fff', // White text for contrast
+                                textTransform: 'none', // Prevent uppercase text
+                                '&:hover': {
+                                    backgroundColor: '#0056b3', // Darker blue on hover
+                                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+                                },
+                            }}
+                            onClick={() => navigate('/register')}
+                        >
                             Register
-                        </button>
-                        <button className="nav-button" onClick={() => navigate('/login')}>
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                margin: '0 10px',
+                                backgroundColor: '#28a745', // Green background
+                                color: '#fff', // White text for contrast
+                                textTransform: 'none',
+                                '&:hover': {
+                                    backgroundColor: '#1e7e34', // Darker green on hover
+                                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+                                },
+                            }}
+                            onClick={() => navigate('/login')}
+                        >
                             Login
-                        </button>
+                        </Button>
+
                     </>
                 )}
-            </div>
-        </div>
+            </Toolbar>
+        </AppBar>
     );
 };
 

@@ -1,101 +1,181 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext'; // Import CartContext
-import '../styles/CartPage.css';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Button,
+    Typography,
+    Paper,
+    Box,
+    IconButton,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useCart } from '../context/CartContext';
 
 const CartPage = () => {
     const navigate = useNavigate();
-    const { cart, removeFromCart, updateCartItem } = useCart();
-    const [showModal, setShowModal] = useState(false);
+    const { cart, updateCartItem, removeFromCart, clearCart } = useCart();
 
-    // Redirect to store if the cart is empty
+    // Redirect to store if cart is empty
     useEffect(() => {
         if (cart.length === 0) {
-            setShowModal(true);
+            navigate('/store');
         }
-    }, [cart]);
+    }, [cart, navigate]);
 
-    const closeModal = () => {
-        setShowModal(false);
-        navigate('/store'); // Redirect to Store.js
-    };
-
-    const handleUpdateQuantity = (productId, quantity) => {
-        if (quantity <= 0) {
-            removeFromCart(productId); // If quantity is 0, remove the item
-        } else {
-            updateCartItem(productId, quantity); // Update the cart item's quantity
-        }
+    const calculateTotal = () => {
+        return cart.reduce((total, item) => total + item.price * item.quantity, 0);
     };
 
     const handleCheckout = () => {
-        navigate('/checkout'); // Navigate to CheckoutPage
+        if (cart.length === 0) {
+            alert('Your cart is empty! Add items before proceeding to checkout.');
+            navigate('/store'); // Navigate to store if the cart is empty
+        } else {
+            navigate('/checkout'); // Navigate to the checkout page
+        }
     };
 
-    const calculateTotal = () => {
-        return cart.reduce(
-            (total, item) => total + item.price * item.quantity,
-            0
-        );
+    const handleContinueShopping = () => {
+        navigate('/store'); // Navigate back to the store
     };
 
     return (
-        <div className="cart-container">
-             {showModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <p>No items in cart to checkout.</p>
-                        <button onClick={closeModal}>Go to Store</button>
-                    </div>
-                </div>
+        <Box sx={{ padding: 3 }}>
+            <Typography variant="h4" gutterBottom>
+                Your Cart
+            </Typography>
+
+            {cart.length === 0 ? (
+                <Typography variant="body1" color="textSecondary">
+                    Your cart is empty. Redirecting to the store...
+                </Typography>
+            ) : (
+                <TableContainer component={Paper} sx={{ marginBottom: 3 }}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell><strong>Product</strong></TableCell>
+                                <TableCell><strong>Details</strong></TableCell>
+                                <TableCell><strong>Quantity</strong></TableCell>
+                                <TableCell><strong>Price</strong></TableCell>
+                                <TableCell><strong>Total</strong></TableCell>
+                                <TableCell><strong>Actions</strong></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {cart.map((item) => (
+                                <TableRow key={item._id}>
+                                    {/* Product Image */}
+                                    <TableCell>
+                                        <img
+                                            src={item.image}
+                                            alt={item.name}
+                                            style={{
+                                                width: '80px',
+                                                height: '80px',
+                                                objectFit: 'cover',
+                                                borderRadius: '8px',
+                                            }}
+                                        />
+                                    </TableCell>
+
+                                    {/* Product Details */}
+                                    <TableCell>
+                                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                            {item.name}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            {item.weight}
+                                        </Typography>
+                                    </TableCell>
+
+                                    {/* Quantity Controls */}
+                                    <TableCell>
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <IconButton
+                                                color="error"
+                                                onClick={() =>
+                                                    item.quantity > 1
+                                                        ? updateCartItem(item._id, item.quantity - 1)
+                                                        : removeFromCart(item._id)
+                                                }
+                                            >
+                                                <RemoveIcon />
+                                            </IconButton>
+                                            <Typography variant="body1" sx={{ mx: 2 }}>
+                                                {item.quantity}
+                                            </Typography>
+                                            <IconButton
+                                                color="primary"
+                                                onClick={() => updateCartItem(item._id, item.quantity + 1)}
+                                            >
+                                                <AddIcon />
+                                            </IconButton>
+                                        </Box>
+                                    </TableCell>
+
+                                    {/* Price */}
+                                    <TableCell>₹{item.price}</TableCell>
+
+                                    {/* Total for This Item */}
+                                    <TableCell>₹{item.price * item.quantity}</TableCell>
+
+                                    {/* Remove Button */}
+                                    <TableCell>
+                                        <IconButton
+                                            color="error"
+                                            onClick={() => removeFromCart(item._id)}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             )}
-            <h1>Your Cart</h1>
-            <div className="cart-items-grid">
-                {cart.map((item) => (
-                    <div className="cart-item-card" key={item._id}>
-                        <div className="item-details">
-                            <h3 className="item-name">{item.name}</h3>
-                            <p className="item-price">₹{item.price}</p>
-                            <div className="item-controls">
-                                <button
-                                    onClick={() =>
-                                        handleUpdateQuantity(item._id, item.quantity - 1)
-                                    }
-                                >
-                                    -
-                                </button>
-                                <span className="item-quantity">{item.quantity}</span>
-                                <button
-                                    onClick={() =>
-                                        handleUpdateQuantity(item._id, item.quantity + 1)
-                                    }
-                                >
-                                    +
-                                </button>
-                            </div>
-                        </div>
-                        <button
-                            className="remove-item-button"
-                            onClick={() => removeFromCart(item._id)}
-                        >
-                            Remove
-                        </button>
-                    </div>
-                ))}
-            </div>
-            <div className="cart-summary">
-                <h3>Total: ₹{calculateTotal()}</h3>
-                <button className="checkout-button" onClick={handleCheckout}>
-                    Proceed to Checkout
-                </button>
-                <button
-                    className="continue-shopping-button"
-                    onClick={() => navigate('/store')}
+
+            {/* Cart Summary */}
+            {cart.length > 0 && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginTop: 3,
+                    }}
                 >
-                    Continue Shopping
-                </button>
-            </div>
-        </div>
+                    <Typography variant="h5">
+                        Total: ₹{calculateTotal()}
+                    </Typography>
+                    <Box>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleCheckout}
+                            sx={{ marginRight: 2 }}
+                        >
+                            Proceed to Checkout
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={handleContinueShopping}
+                        >
+                            Continue Shopping
+                        </Button>
+                    </Box>
+                </Box>
+            )}
+        </Box>
     );
 };
 

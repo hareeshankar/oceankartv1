@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import ProductCard from '../components/ProductCard';
-import SearchBar from '../components/SearchBar';
+import { Grid, Typography, Button, Box, AppBar, Toolbar } from '@mui/material';
+import ProductCard from '../components/ProductCard'; // MUI-enhanced ProductCard
+import SearchBar from '../components/SearchBar'; // SearchBar Component
+import Navbar from '../components/Navbar'; // Navbar updated with MUI
 import { useCart } from '../context/CartContext'; // Import CartContext
-import '../styles/Store.css';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -12,8 +12,7 @@ const Store = () => {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
-    const { cart, addToCart } = useCart(); // Access global cart state and addToCart function
-
+    const { cart, addToCart } = useCart(); // Access cart context
     const isLoggedIn = !!localStorage.getItem('token');
 
     // Fetch products for logged-in users
@@ -39,7 +38,7 @@ const Store = () => {
             setProducts(data);
         } catch (error) {
             console.error('Error fetching authenticated products:', error);
-            alert(error.message); // Optional: Alert the user
+            alert(error.message);
         }
     };
 
@@ -55,25 +54,25 @@ const Store = () => {
             setProducts(data);
         } catch (error) {
             console.error('Error fetching public products:', error);
-            alert(error.message); // Optional: Alert the user
+            alert(error.message);
         }
     };
 
-    // Determine which products to fetch based on login state
+    // Fetch products based on login state
     useEffect(() => {
         if (isLoggedIn) {
             fetchAuthProducts();
         } else {
             fetchPublicProducts();
         }
-    }, [isLoggedIn]); // Re-run if login state changes
+    }, [isLoggedIn]);
 
     const filteredProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const handleAddToCart = (product) => {
-        addToCart({ ...product, quantity: 1 }); // Use addToCart from CartContext
+        addToCart({ ...product, quantity: 1 }); // Add product with quantity 1
     };
 
     const handleViewCart = () => {
@@ -83,65 +82,75 @@ const Store = () => {
     if (!isLoggedIn) {
         // Landing Page UI for non-logged-in users
         return (
-            <div className="hotel-dashboard">
+            <Box>
                 <Navbar />
-                <div className="hero-section">
-                <h1>Welcome to OceanKart</h1>
-                <p>Your trusted platform for fresh and frozen seafood delivery!</p>
-                </div>
+                <Box sx={{ textAlign: 'center', margin: '20px 0' }}>
+                    <Typography variant="h3" gutterBottom>
+                        Welcome to OceanKart
+                    </Typography>
+                    <Typography variant="subtitle1" color="textSecondary">
+                        Your trusted platform for fresh and frozen seafood delivery!
+                    </Typography>
+                </Box>
                 <SearchBar onSearch={setSearchQuery} />
-                <div className="dashboard-content">
-                    <div className="main-content">
-                        <div className="product-grid">
-                            {filteredProducts.map((product) => (
-                                <ProductCard
-                                    key={product._id}
-                                    product={product}
-                                    isGuestView={true}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <Grid container spacing={3} sx={{ padding: 2 }}>
+                    {filteredProducts.map((product) => (
+                        <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
+                            <ProductCard
+                                product={product}
+                                isGuestView={true}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
         );
     }
 
     // Dashboard UI for logged-in users
     return (
-        <div className="store">
-            {/* Navbar with Cart Integration */}
+        <Box>
             <Navbar />
             <SearchBar onSearch={setSearchQuery} />
-            {/* Product Grid */}
-            <div className="product-grid">
+            <Grid container spacing={3} sx={{ padding: 2 }}>
                 {filteredProducts.map((product) => (
-                    <ProductCard
-                        key={product._id}
-                        product={product}
-                        isGuestView={!localStorage.getItem('token')} // Check if user is logged in
-                        onAddToCart={handleAddToCart} // Pass add-to-cart handler
-                    />
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
+                        <ProductCard
+                            product={product}
+                            isGuestView={!localStorage.getItem('token')} // Check if user is logged in
+                            onAddToCart={handleAddToCart} // Pass add-to-cart handler
+                        />
+                    </Grid>
                 ))}
-            </div>
+            </Grid>
 
-            {/* View Cart Button */}
-            <div className="view-cart-footer">
-                <p>
+            {/* View Cart Footer */}
+            <Box
+                sx={{
+                    position: 'sticky',
+                    bottom: 0,
+                    backgroundColor: '#fff',
+                    padding: 2,
+                    borderTop: '1px solid #ddd',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    zIndex: 10,
+                }}
+            >
+                <Typography variant="subtitle1">
                     {cart.length} items | Total: ₹
-                    {cart.reduce(
-                        (total, item) => total + item.price * item.quantity,
-                        0
-                    )}
-                </p>
-                <button
-                    className="view-cart-button"
-                    onClick={handleViewCart} // Navigate to CartPage
+                    {cart.reduce((total, item) => total + item.price * item.quantity, 0)}
+                </Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleViewCart}
                 >
                     View Cart
-                </button>
-            </div>
-        </div>
+                </Button>
+            </Box>
+        </Box>
     );
 };
 
