@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import '../styles/SearchBar.css';
+import { Box, TextField, IconButton, InputAdornment } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBar = ({ onSearch }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -20,27 +22,33 @@ const SearchBar = ({ onSearch }) => {
     };
 
     return (
-        <div className="search-bar-container">
-            <div className="search-bar-wrapper">
-                <input
-                    type="text"
-                    className="search-bar"
-                    placeholder='Search for "Seafood"...'
-                    value={searchQuery}
-                    onChange={handleInputChange}
-                />
-                <button
-                    className="search-icon-button"
-                    onClick={searchQuery ? clearSearch : null}
-                >
-                    {searchQuery ? (
-                        <span role="img" aria-label="clear">❌</span> // Cross icon
-                    ) : (
-                        <span role="img" aria-label="search">🔍</span> // Search icon
-                    )}
-                </button>
-            </div>
-        </div>
+        <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
+            <TextField
+                variant="outlined"
+                placeholder='Search for "Seafood"...'
+                value={searchQuery}
+                onChange={handleInputChange}
+                sx={{
+                    width: '100%',
+                    maxWidth: 600,
+                    backgroundColor: '#fff',
+                    borderRadius: 1,
+                }}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            {searchQuery ? (
+                                <IconButton onClick={clearSearch}>
+                                    <ClearIcon />
+                                </IconButton>
+                            ) : (
+                                <SearchIcon color="action" />
+                            )}
+                        </InputAdornment>
+                    ),
+                }}
+            />
+        </Box>
     );
 };
 
