@@ -1,6 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/OrderHistoryPage.css';
+import { AuthContext } from '../context/AuthContext'; // Import AuthContext
+import {
+    Container,
+    Typography,
+    Button,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Grid,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+    Avatar,
+    CircularProgress,
+    Alert,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -9,88 +26,152 @@ const OrderHistoryPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { token, user } = useContext(AuthContext); // Retrieve token and user from AuthContext
 
     // Fetch orders from the backend
     useEffect(() => {
+        if (!token || !user) {
+            // If not logged in, redirect to OTP Login
+            const storedToken = localStorage.getItem('token');
+            if (!storedToken) {
+                alert('You are not logged in. Redirecting to login page.');
+                navigate('/otp-login');
+            }
+            return;
+        }
+
         const fetchOrders = async () => {
-            try {
-                const response = await fetch(`${API_URL}/api/orders`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`, // Use your authentication token
-                    },
-                });
+            let attempts = 0;
+            const maxRetries = 3;
 
-                if (!response.ok) {
-                    throw new Error('Failed to fetch orders');
+            while (attempts < maxRetries) {
+                try {
+                    const response = await fetch(`${API_URL}/api/orders`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`, // Use token for authentication
+                        },
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        setOrders(data);
+                        setLoading(false);
+                        return;
+                    } else if (response.status === 403 || response.status === 404) {
+                        throw new Error(`Error ${response.status}: ${response.statusText}`);
+                    } else {
+                        throw new Error('Failed to fetch orders');
+                    }
+                } catch (err) {
+                    attempts++;
+                    if (attempts === maxRetries) {
+                        setError(err.message);
+                        setLoading(false);
+                        return;
+                    }
                 }
-
-                const data = await response.json();
-                setOrders(data);
-                setLoading(false);
-            } catch (err) {
-                setError(err.message);
-                setLoading(false);
             }
         };
 
         fetchOrders();
-    }, []);
+    }, [token, user, navigate]);
 
     const handleContinueShopping = () => {
         navigate('/store'); // Redirect to Store.js
     };
 
     if (loading) {
-        return <p>Loading your order history...</p>;
+        return (
+            <Container>
+                <CircularProgress />
+                <Typography variant="h6" align="center" sx={{ mt: 2 }}>
+                    Loading your order history...
+                </Typography>
+            </Container>
+        );
     }
 
     if (error) {
-        return <p>Error: {error}</p>;
+        return (
+            <Container>
+                <Alert severity="error">{error}</Alert>
+            </Container>
+        );
     }
 
     return (
-        <div className="order-history-container">
-            <h1>Order History</h1>
+        <Container maxWidth="lg" sx={{ mt: 4 }}>
+            <Typography variant="h4" gutterBottom align="center">
+                Order History
+            </Typography>
             {orders.length === 0 ? (
-                <p>You have no orders yet.</p>
+                <Typography variant="body1" align="center" sx={{ mt: 2 }}>
+                    You have no orders yet.
+                </Typography>
             ) : (
-                <table className="order-history-table">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Date</th>
-                            <th>Total Amount</th>
-                            <th>Payment Status</th>
-                            <th>Items</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orders.map((order) => (
-                            <tr key={order._id}>
-                                <td>{order._id}</td>
-                                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-                                <td>₹{order.totalAmount}</td>
-                                <td>{order.paymentStatus}</td>
-                                <td>
-                                    <ul>
+                orders.map((order) => (
+                    <Accordion key={order._id} sx={{ mb: 2 }}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography>
+                                <strong>Order ID:</strong> {order._id} | <strong>Date:</strong>{' '}
+                                {new Date(order.createdAt).toLocaleDateString()} |{' '}
+                                <strong>Total:</strong> ₹{order.totalAmount}
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <Typography variant="subtitle1">
+                                        <strong>Payment Status:</strong> {order.paymentStatus}
+                                    </Typography>
+                                    <Typography variant="subtitle1">
+                                        <strong>Delivery Status:</strong> {order.deliveryStatus}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Typography variant="subtitle1">
+                                        <strong>Address:</strong> {`${order.address.line1}, ${order.address.line2 || ''}, ${order.address.area || ''}, ${order.address.city}, ${order.address.state} - ${order.address.zipcode}`}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="subtitle1">
+                                        <strong>Items:</strong>
+                                    </Typography>
+                                    <List dense>
                                         {order.items.map((item) => (
-                                            <li key={item.productId}>
-                                                {item.name} - Qty: {item.quantity}
-                                            </li>
+                                            <ListItem key={item._id}>
+                                                <ListItemAvatar>
+                                                    <Avatar
+                                                        src={item.image}
+                                                        alt={item.name}
+                                                        variant="square"
+                                                        sx={{ width: 56, height: 56 }}
+                                                    />
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={`${item.name} (Size: ${item.size || 'N/A'})`}
+                                                    secondary={`Qty: ${item.quantity} | Price: ₹${item.price}`}
+                                                    sx={{ ml: 2 }} // Add spacing between image and text
+                                                />
+                                            </ListItem>
                                         ))}
-                                    </ul>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                    </List>
+                                </Grid>
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
+                ))
             )}
-            <div className="order-history-actions">
-                <button className="primary-button" onClick={handleContinueShopping}>
-                    Continue Shopping
-                </button>
-            </div>
-        </div>
+            <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ mt: 3 }}
+                onClick={handleContinueShopping}
+            >
+                Continue Shopping
+            </Button>
+        </Container>
     );
 };
 

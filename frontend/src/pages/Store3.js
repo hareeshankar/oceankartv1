@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
 import { useCart } from '../context/CartContext';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext'; // Import AuthContext
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -21,11 +21,10 @@ const Store = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
     const navigate = useNavigate();
-    const { cart } = useCart(); // Access cart from CartContext
-    const { token, isLoggedIn } = useContext(AuthContext); // AuthContext
-
+    const { cart, addToCart } = useCart();
+    const { token, isLoggedIn } = useContext(AuthContext); // Retrieve token and login status from AuthContext
+   
     const fetchAuthProducts = useCallback(async () => {
         try {
             if (!token) throw new Error('No authentication token found. Please log in.');
@@ -47,7 +46,7 @@ const Store = () => {
         } finally {
             setLoading(false);
         }
-    }, [token]);
+    }, [token]); // Add token as a dependency
 
     const fetchPublicProducts = useCallback(async () => {
         try {
@@ -65,30 +64,28 @@ const Store = () => {
     }, []);
 
     useEffect(() => {
-        setLoading(true);
+        setLoading(true); // Reset loading state on fetch start
+
         if (isLoggedIn) {
-            fetchAuthProducts();
+            fetchAuthProducts(); // Fetch authenticated products
         } else {
-            fetchPublicProducts();
+            fetchPublicProducts(); // Fetch public products
         }
     }, [isLoggedIn, fetchAuthProducts, fetchPublicProducts]);
-
-    // Listen for cart updates and show the Snackbar
-    useEffect(() => {
-        if (cart.length > 0) {
-            //const lastItem = cart[cart.length - 1];
-            setSnackbarMessage(`Added item to the cart!`);
-            setSnackbarOpen(true);
-        }
-    }, [cart]);
 
     const filteredProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const handleAddToCart = (product) => {
+        addToCart({ ...product, quantity: 1 });
+        setSnackbarOpen(true);
+    };
+
     const handleSnackbarClose = () => setSnackbarOpen(false);
 
     const handleViewCart = () => navigate('/cart');
+
 
     if (loading) {
         return (
@@ -124,6 +121,7 @@ const Store = () => {
                         <ProductCard
                             product={product}
                             isGuestView={!isLoggedIn}
+                            onAddToCart={handleAddToCart}
                         />
                     </Grid>
                 ))}
@@ -155,12 +153,12 @@ const Store = () => {
             {/* Snackbar for Add to Cart Feedback */}
             <Snackbar
                 open={snackbarOpen}
-                autoHideDuration={1500}
+                autoHideDuration={3000}
                 onClose={handleSnackbarClose}
-                anchorOrigin={{ vertical: 'middle', horizontal: 'center' }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             >
                 <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-                    {snackbarMessage}
+                    Item added to cart!
                 </Alert>
             </Snackbar>
         </Box>

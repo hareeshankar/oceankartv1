@@ -14,8 +14,6 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemAvatar,
-    Avatar,
 } from '@mui/material';
 import axios from 'axios';
 
@@ -42,6 +40,7 @@ const CheckoutPage = () => {
                     return;
                 }
 
+                console.log('Fetching address for user:', user.id);
                 const response = await axios.get(`${API_URL}/api/users/${user.id}/address`, {
                     headers: {
                         Authorization: `Bearer ${user.token}`, // Include token for authentication
@@ -49,6 +48,7 @@ const CheckoutPage = () => {
                 });
 
                 if (response.status === 200) {
+                    console.log('Address retrieved successfully:', response.data);
                     setAddress(response.data.address); // Populate address state with response
                 } else {
                     console.error('Failed to fetch address. Status:', response.status);
@@ -59,7 +59,7 @@ const CheckoutPage = () => {
         };
 
         fetchAddress();
-    }, [API_URL, user]);
+    }, [user]);
 
     const handleAddressChange = (field, value) => {
         setAddress((prevAddress) => ({
@@ -97,25 +97,9 @@ const CheckoutPage = () => {
             </Typography>
             <List>
                 {cart.map((item) => (
-                    <ListItem
-                    key={item._id}
-                    sx={{
-                        borderBottom: '1px solid #e0e0e0',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2, // Add spacing between image and text
-                    }}
-                    >
-                        <ListItemAvatar>
-                            <Avatar
-                                src={item.image}
-                                alt={item.name}
-                                variant="square"
-                                sx={{ width: 56, height: 56 }}
-                            />
-                        </ListItemAvatar>
+                    <ListItem key={item._id} sx={{ borderBottom: '1px solid #e0e0e0' }}>
                         <ListItemText
-                            primary={`${item.name} (Size: ${item.size || 'N/A'})`}
+                            primary={item.name}
                             secondary={`Qty: ${item.quantity} | Price: ₹${item.price}`}
                         />
                     </ListItem>
@@ -213,19 +197,21 @@ const CheckoutPage = () => {
                         Manage Cart
                     </Button>
                 </Grid>
-                <Grid item xs={12}>
-                    <RazorpayButton
-                        amount={calculateTotal()}
-                        deliveryAddress={address}
-                        cartItems={cart} // Pass cart from context
-                        navigateTo="/orders" // Navigate to Order History after payment
-                        onPaymentError={(error) => {
-                            console.error('Payment failed:', error);
-                            alert('Payment could not be completed.');
-                        }}
-                    />
-                </Grid>
             </Grid>
+
+            {/* Razorpay Button */}
+            <Box sx={{ mt: 4 }}>
+                <RazorpayButton
+                    amount={calculateTotal()}
+                    deliveryAddress={address}
+                    cartItems={cart} // Pass cart from context
+                    navigateTo="/orders" // Navigate to Order History after payment
+                    onPaymentError={(error) => {
+                        console.error('Payment failed:', error);
+                        alert('Payment could not be completed.');
+                    }}
+                />
+            </Box>
         </Container>
     );
 };

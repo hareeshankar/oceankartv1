@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     AppBar,
     Toolbar,
@@ -13,22 +13,18 @@ import {
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext'; // Use AuthContext
-import { useCart } from '../context/CartContext'; // Use CartContext
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
-    const { isLoggedIn, logout } = useContext(AuthContext); // Global login state
-    const { cart, clearCart } = useCart(); // Cart state
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+    const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    // Reset anchorEl whenever the login state changes
+    const { cart, clearCart } = useCart(); // Added clearCart from CartContext
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            setAnchorEl(null);
-        }
-    }, [isLoggedIn]);
+        // Ensure isLoggedIn state updates on component mount or token change
+        setIsLoggedIn(!!localStorage.getItem('token'));
+    }, []);
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -39,13 +35,15 @@ const Navbar = () => {
     };
 
     const handleLogout = () => {
-        logout(); // Clear login state
-        clearCart()
-        navigate('/store'); // Redirect to login
+        localStorage.removeItem('token'); // Remove token
+        clearCart(); // Clear the cart
+        setIsLoggedIn(false); // Update login state
+        setAnchorEl(null); // Close menu
+        navigate('/'); // Redirect to store page
     };
 
     return (
-        <AppBar position="fixed" sx={{ backgroundColor: '#004080' }}>
+        <AppBar position="static" sx={{ backgroundColor: '#004080' }}>
             <Toolbar>
                 {/* Logo Section */}
                 <Box
@@ -66,7 +64,9 @@ const Navbar = () => {
                             marginRight: '10px',
                         }}
                     />
-                    <Typography variant="h6">OceanKart</Typography>
+                    <Typography variant="h6" component="div">
+                        OceanKart
+                    </Typography>
                 </Box>
 
                 {/* Cart Icon */}
@@ -95,7 +95,9 @@ const Navbar = () => {
                             <MenuItem onClick={() => { handleMenuClose(); navigate('/orders'); }}>
                                 My Orders
                             </MenuItem>
-                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                            <MenuItem onClick={handleLogout}>
+                                Logout
+                            </MenuItem>
                         </Menu>
                     </>
                 ) : (
@@ -107,7 +109,10 @@ const Navbar = () => {
                                 backgroundColor: '#007BFF',
                                 color: '#fff',
                                 textTransform: 'none',
-                                '&:hover': { backgroundColor: '#0056b3' },
+                                '&:hover': {
+                                    backgroundColor: '#0056b3',
+                                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+                                },
                             }}
                             onClick={() => navigate('/otp-register')}
                         >
@@ -120,7 +125,10 @@ const Navbar = () => {
                                 backgroundColor: '#28a745',
                                 color: '#fff',
                                 textTransform: 'none',
-                                '&:hover': { backgroundColor: '#1e7e34' },
+                                '&:hover': {
+                                    backgroundColor: '#1e7e34',
+                                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+                                },
                             }}
                             onClick={() => navigate('/otp-login')}
                         >

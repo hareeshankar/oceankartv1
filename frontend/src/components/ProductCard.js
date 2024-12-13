@@ -26,7 +26,7 @@ const ProductCard = ({ product }) => {
                     {product.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {product.weight}
+                    {product.size}
                 </Typography>
                 <Typography variant="body1" sx={{ fontWeight: 'bold', marginTop: 1 }}>
                     ₹{product.price}

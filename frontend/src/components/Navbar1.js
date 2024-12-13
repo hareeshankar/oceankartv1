@@ -1,34 +1,20 @@
-import React, { useEffect, useContext } from 'react';
-import {
-    AppBar,
-    Toolbar,
-    Typography,
-    IconButton,
-    Badge,
-    Menu,
-    MenuItem,
-    Box,
-    Button,
-} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Badge, Menu, MenuItem, Box, Button } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext'; // Use AuthContext
-import { useCart } from '../context/CartContext'; // Use CartContext
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
-    const { isLoggedIn, logout } = useContext(AuthContext); // Global login state
-    const { cart, clearCart } = useCart(); // Cart state
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+    const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    // Reset anchorEl whenever the login state changes
+    const { cart, clearCart } = useCart(); // Added clearCart from CartContext
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            setAnchorEl(null);
-        }
-    }, [isLoggedIn]);
+        // Check token on component mount to ensure isLoggedIn is accurate
+        setIsLoggedIn(!!localStorage.getItem('token'));
+    }, []);
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -39,13 +25,15 @@ const Navbar = () => {
     };
 
     const handleLogout = () => {
-        logout(); // Clear login state
-        clearCart()
-        navigate('/store'); // Redirect to login
+        localStorage.removeItem('token'); // Remove token from localStorage
+        clearCart(); // Clear the cart when logging out
+        setIsLoggedIn(false); // Update login state
+        setAnchorEl(null); // Close the menu
+        navigate('/'); // Redirect to landing page
     };
 
     return (
-        <AppBar position="fixed" sx={{ backgroundColor: '#004080' }}>
+        <AppBar position="static" sx={{ backgroundColor: '#004080' }}>
             <Toolbar>
                 {/* Logo Section */}
                 <Box
@@ -66,7 +54,9 @@ const Navbar = () => {
                             marginRight: '10px',
                         }}
                     />
-                    <Typography variant="h6">OceanKart</Typography>
+                    <Typography variant="h6" component="div">
+                        OceanKart
+                    </Typography>
                 </Box>
 
                 {/* Cart Icon */}
@@ -89,12 +79,7 @@ const Navbar = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleMenuClose}
                         >
-                            <MenuItem onClick={() => { handleMenuClose(); navigate('/profile'); }}>
-                                Profile
-                            </MenuItem>
-                            <MenuItem onClick={() => { handleMenuClose(); navigate('/orders'); }}>
-                                My Orders
-                            </MenuItem>
+                            <MenuItem onClick={() => navigate('/profile')}>Profile</MenuItem>
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
                     </>
@@ -104,12 +89,15 @@ const Navbar = () => {
                             variant="contained"
                             sx={{
                                 margin: '0 10px',
-                                backgroundColor: '#007BFF',
-                                color: '#fff',
-                                textTransform: 'none',
-                                '&:hover': { backgroundColor: '#0056b3' },
+                                backgroundColor: '#007BFF', // Blue background
+                                color: '#fff', // White text for contrast
+                                textTransform: 'none', // Prevent uppercase text
+                                '&:hover': {
+                                    backgroundColor: '#0056b3', // Darker blue on hover
+                                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+                                },
                             }}
-                            onClick={() => navigate('/otp-register')}
+                            onClick={() => navigate('/register')}
                         >
                             Register
                         </Button>
@@ -117,15 +105,19 @@ const Navbar = () => {
                             variant="contained"
                             sx={{
                                 margin: '0 10px',
-                                backgroundColor: '#28a745',
-                                color: '#fff',
+                                backgroundColor: '#28a745', // Green background
+                                color: '#fff', // White text for contrast
                                 textTransform: 'none',
-                                '&:hover': { backgroundColor: '#1e7e34' },
+                                '&:hover': {
+                                    backgroundColor: '#1e7e34', // Darker green on hover
+                                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+                                },
                             }}
-                            onClick={() => navigate('/otp-login')}
+                            onClick={() => navigate('/login')}
                         >
                             Login
                         </Button>
+
                     </>
                 )}
             </Toolbar>

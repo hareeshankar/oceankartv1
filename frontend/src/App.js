@@ -1,33 +1,62 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Register from './pages/Register';
-import Login from './pages/Login';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout'; // Layout with Navbar
 import Store from './pages/Store';
-import VendorDashboard from './pages/VendorDashboard';
-import AdminDashboard from './pages/AdminDashboard';
-import DeliveryDashboard from './pages/DeliveryDashboard';
 import CartPage from './components/CartPage';
 import CheckoutPage from './components/CheckoutPage';
 import OrderHistoryPage from './components/OrderHistoryPage';
-import ProfilePage from './components/ProfilePage';
-
+import ProfilePage from './pages/ProfilePage';
+import OTPLogin from './pages/OTPLogin'; // OTP Login Page
+import OTPRegister from './pages/OTPRegister'; // OTP Register Page
+import ProtectedRoute from './components/ProtectedRoute'; // Authentication Guard
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Store />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/store" element={<Store />} />
-                <Route path="/vendor-dashboard" element={<VendorDashboard />} />
-                <Route path="/admin-dashboard" element={<AdminDashboard />} />
-                <Route path="/delivery-dashboard" element={<DeliveryDashboard />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/orders" element={<OrderHistoryPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-
+                {/* Routes with Navbar */}
+                <Route element={<Layout />}>
+                    <Route path="/" element={<Store />} />
+                    <Route path="/store" element={<Store />} />
+                    
+                    {/* Protected Routes */}
+                    <Route
+                        path="/cart"
+                        element={
+                            <ProtectedRoute>
+                                <CartPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/checkout"
+                        element={
+                            <ProtectedRoute>
+                                <CheckoutPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/orders"
+                        element={
+                            <ProtectedRoute>
+                                <OrderHistoryPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/profile"
+                        element={
+                            <ProtectedRoute>
+                                <ProfilePage />
+                            </ProtectedRoute>
+                        }
+                    />
+                    
+                    {/* Public Routes */}
+                    <Route path="/otp-login" element={<OTPLogin />} />
+                    <Route path="/otp-register" element={<OTPRegister />} />
+                </Route>
             </Routes>
         </Router>
     );

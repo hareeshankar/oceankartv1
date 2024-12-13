@@ -20,9 +20,9 @@ import { useCart } from '../context/CartContext';
 
 const CartPage = () => {
     const navigate = useNavigate();
-    const { cart, updateCartItem, removeFromCart, clearCart } = useCart();
+    const { cart, updateCartItem, removeFromCart } = useCart();
 
-    // Redirect to store if cart is empty
+    // Redirect to store if the cart is empty
     useEffect(() => {
         if (cart.length === 0) {
             navigate('/store');
@@ -36,14 +36,14 @@ const CartPage = () => {
     const handleCheckout = () => {
         if (cart.length === 0) {
             alert('Your cart is empty! Add items before proceeding to checkout.');
-            navigate('/store'); // Navigate to store if the cart is empty
+            navigate('/store');
         } else {
-            navigate('/checkout'); // Navigate to the checkout page
+            navigate('/checkout');
         }
     };
 
     const handleContinueShopping = () => {
-        navigate('/store'); // Navigate back to the store
+        navigate('/store');
     };
 
     return (
@@ -92,7 +92,7 @@ const CartPage = () => {
                                             {item.name}
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary">
-                                            {item.weight}
+                                            {item.size}
                                         </Typography>
                                     </TableCell>
 
