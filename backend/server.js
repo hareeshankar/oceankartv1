@@ -4,7 +4,6 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 
 const authMiddleware = require('./middleware/authMiddleware'); // Existing authentication middleware
-const cors = require('cors');
 
 // Allow all origins or specific domains
 const corsOptions = {
