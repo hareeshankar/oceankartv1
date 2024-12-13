@@ -12,8 +12,6 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-app.use(cors(corsOptions)); // Apply CORS middleware globally
-
 dotenv.config();
 
 const app = express();
