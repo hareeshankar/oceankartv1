@@ -7,7 +7,7 @@ const authMiddleware = require('./middleware/authMiddleware'); // Existing authe
 
 // Allow all origins or specific domains
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://your-frontend-domain.com'], // Replace with actual frontend URLs
+    origin: ['http://localhost:3000', 'https://www.oceankart.co.in'], // Replace with actual frontend URLs
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
@@ -17,7 +17,7 @@ app.use(cors(corsOptions)); // Apply CORS middleware globally
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions)); // Apply CORS middleware globally
 app.use(express.json());
 
 // Connect to MongoDB
