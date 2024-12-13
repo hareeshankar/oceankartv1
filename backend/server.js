@@ -4,6 +4,16 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 
 const authMiddleware = require('./middleware/authMiddleware'); // Existing authentication middleware
+const cors = require('cors');
+
+// Allow all origins or specific domains
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https://your-frontend-domain.com'], // Replace with actual frontend URLs
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions)); // Apply CORS middleware globally
 
 dotenv.config();
 
