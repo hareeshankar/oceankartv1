@@ -41,15 +41,29 @@ const OTPRegister = () => {
                 setError(true);
                 return;
             }
-
+    
             setLoading(true);
+    
+            // Check if the phone number is already registered
+            const checkResponse = await axios.post(`${API_URL}/api/auth/otp/check-phone`, {
+                phoneNumber: `+91${phoneNumber}`,
+            });
+    
+            if (checkResponse.data.exists) {
+                setMessage('Phone number is already registered. Please log in.');
+                setError(true);
+                setStep(1); // Stay on the same step
+                return;
+            }
+    
+            // Send OTP if phone number is not registered
             const response = await axios.post(`${API_URL}/api/auth/otp/send`, {
                 phoneNumber: `+91${phoneNumber}`,
             });
-
+    
             setMessage('OTP sent successfully!');
             setError(false);
-            setStep(2);
+            setStep(2); // Proceed to OTP verification step
         } catch (err) {
             console.error('Error sending OTP:', err.message);
             setMessage('Failed to send OTP. Please try again.');
@@ -58,7 +72,7 @@ const OTPRegister = () => {
             setLoading(false);
         }
     };
-
+    
     const handleVerifyOTP = async () => {
         try {
             setLoading(true);
@@ -66,21 +80,11 @@ const OTPRegister = () => {
                 phoneNumber: `+91${phoneNumber}`,
                 otp,
             });
-
+    
             if (response.data.success) {
                 setMessage('OTP verified successfully!');
                 setError(false);
-
-                // Fetch pre-filled details if they exist
-                const userResponse = await axios.post(`${API_URL}/api/auth/otp/check-phone`, {
-                    phoneNumber: `+91${phoneNumber}`,
-                });
-
-                if (userResponse.data.exists) {
-                    setUserDetails(userResponse.data.user); // Populate form with user details
-                }
-
-                setStep(3);
+                setStep(3); // Proceed to registration form
             } else {
                 setMessage('Invalid OTP. Please try again.');
                 setError(true);
@@ -93,6 +97,7 @@ const OTPRegister = () => {
             setLoading(false);
         }
     };
+    
 
     const handleRegister = async () => {
         try {
