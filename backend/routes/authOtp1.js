@@ -58,7 +58,7 @@ router.post('/register', async (req, res) => {
         !name ||
         !email ||
         !address ||
-        !address.line1 ||
+        !address.addressLine1 ||
         !address.area ||
         !address.city ||
         !address.state ||
@@ -80,14 +80,14 @@ router.post('/register', async (req, res) => {
             fullName: name,
             email,
             address: {
-                line1: address.line1,
-                line2: address.line2 || '', // Optional field
+                line1: address.addressLine1,
+                line2: address.addressLine2 || '', // Optional field
                 area: address.area,
                 city: address.city,
                 state: address.state,
                 zipcode: address.zipcode,
             },
-            // role defaults to 'customer' in schema
+            // role will default to 'customer' as defined in the User schema
         });
 
         await newUser.save();
@@ -95,7 +95,7 @@ router.post('/register', async (req, res) => {
         // Generate JWT token with _userId and role
         const tokenPayload = {
             userId: newUser._id,
-            role: newUser.role, // The role defaults in the schema
+            role: newUser.role, // The role should be set by default in the schema
         };
 
         const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: '1h' });
